@@ -10,6 +10,9 @@ Please fork this repository and send me pull requests for displays that you want
 
 Project List:
 
+**matrixTestBruteForce**:  This program details the struggle I went through to get a working setup.  The code is
+ugly (not DRY).  If anyone can figure out how to clean it, I would be grateful.
+
 **singleDotCycleEntireMatrix**:  This program is boring, but useful after initial setup of the screen array.  
 It will ensure that the individual LED strands are wired correctly.
 
