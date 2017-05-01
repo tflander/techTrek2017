@@ -3,30 +3,33 @@
   #include <avr/power.h>
 #endif
 
-const int numRows = 8;
-const int pixelsPerRow = 24;
-// const int onBrightness = 128;
+const int numStrands = 8;
+const int pixelsPerStrand = 24;
+const int onBrightness = 16;
+const int pinForRowZero = 2;
 const int LIVE = 1;
 const int DEAD = -1;
 const int NEUTRAL = 0;
 const int RED = LIVE;
 const int GREEN = NEUTRAL;
 const int BLUE = DEAD;
+const int isRGBW = 0;
 
-unsigned long cells[pixelsPerRow][numRows];
-Adafruit_NeoPixel pixels[numRows];
+unsigned long cells[pixelsPerStrand][numStrands];
+
+Adafruit_NeoPixel *matrix[numStrands];
 
 void setup() {
 
-  for (int row = 0; row < numRows; ++row) {
-
-    Adafruit_NeoPixel pixels[row] = Adafruit_NeoPixel(pixelsPerRow, row, NEO_GRB + NEO_KHZ800);
-    pixels[row].begin();
-    
-    for (int col = 0; col < pixelsPerRow; ++ col) {
-      setCell(random(1), row, col);
-    }
-  }  
+ neoPixelType pixelType = NEO_GRB + NEO_KHZ800;
+  if(isRGBW) {
+    pixelType = NEO_GRBW + NEO_KHZ800;
+  }
+  for (int strand=0; strand < numStrands; ++strand) {
+    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, NEO_GRB + NEO_KHZ800);
+    pixels->begin();
+    matrix[strand] = pixels;
+  }
 }
 
 int getRandomValueForColor(int isLive, int color) {
@@ -75,11 +78,11 @@ unsigned long toLong(int isAlive, int red, int green, int blue) {
 
 
 void loop() {
-  for (int row = 0; row < numRows; ++row) {
-    for(int pixel = 0; pixel < pixelsPerRow; ++pixel) {
+  for (int row = 0; row < numStrands; ++row) {
+    for(int pixel = 0; pixel < pixelsPerStrand; ++pixel) {
         long cellAsLong = cells[pixel][row];
-      pixels[row].setPixelColor(pixel, getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong));
-      pixels[row].show();
+      matrix[row]->setPixelColor(pixel, getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong));
+      matrix[row]->show();
     }
   }
   
