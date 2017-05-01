@@ -20,3 +20,5 @@ Please fork this repository and send me pull requests for displays that you want
 It will ensure that the individual LED strands are wired correctly.
 
 **pixelIntegrityTest**: Cycle through all LEDS color-by-color to verify they are all functional
+
+**stressTest**: Verify that the power is adequate for lighting all pixels full blast at the same time
