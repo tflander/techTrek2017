@@ -8,7 +8,7 @@ Each light is an 11" round balloon backed by a 32-bit RGBW LED.  The array will 
 
 Please fork this repository and send me pull requests for displays that you want to contribute to this event.
 
-##Project List:
+## Project List:
 
 ### Fun Stuff
 
