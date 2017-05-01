@@ -13,6 +13,7 @@ Please fork this repository and send me pull requests for displays that you want
 ### Fun Stuff
 
 **randomMatrix**: This program simulates Hollywood computers from the 1960's.
+  https://www.youtube.com/watch?v=mIcSkuEbRSg
 
 TODO: **Conway's Game of Life**
 
