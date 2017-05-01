@@ -16,9 +16,8 @@ Please fork this repository and send me pull requests for displays that you want
 
 ### Boring Stuff
 
-**singleDotCycleEntireMatrix**:  This program is boring, but useful after initial setup of the screen array.  
-It will ensure that the individual LED strands are wired correctly.
+**singleDotCycleEntireMatrix**:  Verify that the individual LED strands are wired correctly in the proper order.
 
-**pixelIntegrityTest**: Cycle through all LEDS color-by-color to verify they are all functional
+**pixelIntegrityTest**: Verify all LEDS in each pixel are functional
 
 **stressTest**: Verify that the power is adequate for lighting all pixels full blast at the same time
