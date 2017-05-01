@@ -8,10 +8,15 @@ Each light is an 11" round balloon backed by a 32-bit RGBW LED.  The array will 
 
 Please fork this repository and send me pull requests for displays that you want to contribute to this event.
 
-Project List:
+##Project List:
+
+### Fun Stuff
+
+**randomMatrix**: This program simulates Hollywood computers from the 1960's.
+
+### Boring Stuff
 
 **singleDotCycleEntireMatrix**:  This program is boring, but useful after initial setup of the screen array.  
 It will ensure that the individual LED strands are wired correctly.
 
-**randomMatrix**: This program simulates Hollywood computers from the 1960's.
-
+**pixelIntegrityTest**: Cycle through all LEDS color-by-color to verify they are all functional
