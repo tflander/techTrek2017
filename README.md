@@ -23,6 +23,11 @@ TODO: **Message Marquee**
 
 **singleDotCycleEntireMatrix**:  Verify that the individual LED strands are wired correctly in the proper order.
 
-**pixelIntegrityTest**: Verify all LEDS in each pixel are functional
+**pixelIntegrityTest**: Verify all LEDS in each pixel are functional for an entire matrix.  Used to check for problems 
+after the matrix is assembled.
+
+**strandIntegrityTest**: Verify all LEDS in each pixel are functional for a single strand.  Used to check for problems 
+after soldering a bunch of LEDS.
 
 **stressTest**: Verify that the power is adequate for lighting all pixels full blast at the same time
+
