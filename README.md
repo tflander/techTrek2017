@@ -14,6 +14,10 @@ Please fork this repository and send me pull requests for displays that you want
 
 **randomMatrix**: This program simulates Hollywood computers from the 1960's.
 
+TODO: **Conway's Game of Life**
+
+TODO: **Message Marquee**
+
 ### Boring Stuff
 
 **singleDotCycleEntireMatrix**:  Verify that the individual LED strands are wired correctly in the proper order.
