@@ -29,29 +29,34 @@ void setup() {
     Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, NEO_GRB + NEO_KHZ800);
     pixels->begin();
     matrix[strand] = pixels;
+
+    for(int pixel = 0; pixel < pixelsPerStrand; ++pixel) {
+      setCell(random(2), strand, pixel);
+    }
   }
 }
 
 int getRandomValueForColor(int isLive, int color) {
   if(color == DEAD) {
     if(isLive) return 0;
-    return 255;
+    return onBrightness;
   }
     
   if(color == LIVE) {
-    if(isLive) return 255;
+    if(isLive) return onBrightness;
     return 0;
   }
-  return random(255);
+  return random(onBrightness);
 }
 
-void setDead(int row, int col) {
-  setCell(0, row, col);
-}
-
-void setAlive(int row, int col) {
-  setCell(1, row, col);
-}
+// TODO: will need these later.
+//void setDead(int row, int col) {
+//  setCell(0, row, col);
+//}
+//
+//void setAlive(int row, int col) {
+//  setCell(1, row, col);
+//}
 
 void setCell(int isLive, int row, int col) {
   int red = getRandomValueForColor(isLive, RED);
@@ -73,7 +78,7 @@ int getBlueFromLong(unsigned long value) {
 }
 
 unsigned long toLong(int isAlive, int red, int green, int blue) {
-  return blue | (green << 8) | (red << 16) | (isAlive << 24);
+  return (unsigned long)blue | ((unsigned long)green << 8) | ((unsigned long)red << 16) | ((unsigned long)isAlive << 24);
 }
 
 
@@ -81,9 +86,9 @@ void loop() {
   for (int row = 0; row < numStrands; ++row) {
     for(int pixel = 0; pixel < pixelsPerStrand; ++pixel) {
         long cellAsLong = cells[pixel][row];
-      matrix[row]->setPixelColor(pixel, getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong));
-      matrix[row]->show();
+        matrix[row]->setPixelColor(pixel, getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong));
     }
+    matrix[row]->show();
   }
   
   delay(10000);
