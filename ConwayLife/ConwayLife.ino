@@ -7,14 +7,16 @@
 
 const int numStrands = 8;
 const int pixelsPerStrand = 24;
-const int onBrightness = 8;
+const int onBrightness = 32;
 const int pinForRowZero = 2;
 const int LIVE = 1;
 const int DEAD = -1;
 const int NEUTRAL = 0;
-const int RED = LIVE;
-const int GREEN = NEUTRAL;
-const int BLUE = DEAD;
+
+int redState;
+int greenState;
+int blueState;
+
 const int isRGBW = 0;
 const int delayBetweenCycles = 500;
 
@@ -39,10 +41,6 @@ void setup() {
     matrix[y] = pixels;
   }  
 
-//  initWithSeed(1);  // boring 76
-//  initWithSeed(2);  // good 171
-//  initWithSeed(3);  // good, dies at 97
-  initWithSeed(4);  // great, about 400?
 }
 
 void initWithSeed(int seed)  {
@@ -60,14 +58,14 @@ void initWithSeed(int seed)  {
 int getRandomValueForColor(int isLive, int color) {
   if(color == DEAD) {
     if(isLive) return 0;
-    return onBrightness;
+    return random(onBrightness/4) + onBrightness/4;
   }
     
   if(color == LIVE) {
     if(isLive) return onBrightness;
     return 0;
   }
-  return random(onBrightness/2);
+  return random(onBrightness/4);
 }
 
 void setDead(int x, int y) {
@@ -79,9 +77,9 @@ void setAlive(int x, int y) {
 }
 
 void setCell(int isLive, int x, int y) {
-  int red = getRandomValueForColor(isLive, RED);
-  int green = getRandomValueForColor(isLive, GREEN);
-  int blue = getRandomValueForColor(isLive, BLUE);
+  int red = getRandomValueForColor(isLive, redState);
+  int green = getRandomValueForColor(isLive, greenState);
+  int blue = getRandomValueForColor(isLive, blueState);
   cells[x][y] = toLong(isLive, red, green, blue);
 }
 
@@ -187,9 +185,35 @@ void showCells() {
   delay(delayBetweenCycles);  
 }
 
+void runCyclesWithSeed(int cycles, int seed) {
+  
+  initWithSeed(seed);
+  
+  for (int i = 0; i < cycles; ++i) {
+    showCells();
+    mutateGrid();    
+  }
+}
+
 void loop() {
-  // TODO: find interesting seeds, limit loops, tweak colors.
-  showCells();
-  mutateGrid();
+
+//  redState = LIVE;
+//  greenState = NEUTRAL;
+//  blueState = DEAD;
+//
+//  runCyclesWithSeed(175, 2);
+
+  redState = NEUTRAL;
+  greenState = DEAD;
+  blueState = LIVE;
+
+  runCyclesWithSeed(100, 3);
+  
+  redState = DEAD;
+  greenState = LIVE;
+  blueState = NEUTRAL;
+
+  runCyclesWithSeed(240, 4);
+  
 }
 
