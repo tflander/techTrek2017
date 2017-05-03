@@ -16,7 +16,7 @@ const int RED = LIVE;
 const int GREEN = NEUTRAL;
 const int BLUE = DEAD;
 const int isRGBW = 0;
-const int delayBetweenCycles = 1000;
+const int delayBetweenCycles = 500;
 
 unsigned long cells[pixelsPerStrand][numStrands];
 
@@ -32,17 +32,29 @@ void setup() {
   if(isRGBW) {
     pixelType = NEO_GRBW + NEO_KHZ800;
   }
-  
+
   for (int y=0; y < numStrands; ++y) {
     Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, y + pinForRowZero, NEO_GRB + NEO_KHZ800);
     pixels->begin();
     matrix[y] = pixels;
+  }  
+
+//  initWithSeed(1);  // boring 76
+//  initWithSeed(2);  // good 171
+//  initWithSeed(3);  // good, dies at 97
+  initWithSeed(4);  // great, about 400?
+}
+
+void initWithSeed(int seed)  {
+  randomSeed(seed);
+
+  for (int y=0; y < numStrands; ++y) {
 
     for(int x = 0; x < pixelsPerStrand; ++x) {
       setCell(random(2), x, y);
     }
   }
-
+  
 }
 
 int getRandomValueForColor(int isLive, int color) {
