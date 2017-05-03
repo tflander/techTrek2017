@@ -24,18 +24,15 @@ Adafruit_NeoPixel *matrix[numStrands];
 
 void setup() {
 
-#ifdef DEBUG
-Serial.begin(9600);
-#endif
-
   #ifdef DEBUG
-    Serial.println("+setup()");
+    Serial.begin(9600);
   #endif
 
- neoPixelType pixelType = NEO_GRB + NEO_KHZ800;
+  neoPixelType pixelType = NEO_GRB + NEO_KHZ800;
   if(isRGBW) {
     pixelType = NEO_GRBW + NEO_KHZ800;
   }
+  
   for (int y=0; y < numStrands; ++y) {
     Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, y + pinForRowZero, NEO_GRB + NEO_KHZ800);
     pixels->begin();
@@ -46,10 +43,6 @@ Serial.begin(9600);
     }
   }
 
-  #ifdef DEBUG
-    Serial.println("-setup()");
-  #endif
-  
 }
 
 int getRandomValueForColor(int isLive, int color) {
@@ -129,18 +122,6 @@ void mutateGrid() {
       }
     }
 
-  #ifdef DEBUG
-    Serial.println("Cells to Flip");
-  for( int y = 0; y < numStrands; ++y) {
-    for (int x = 0; x < pixelsPerStrand; ++x) {
-      Serial.print(newCells[x][y]);
-    }
-    Serial.println("");
-  }    
-  Serial.println("==========");
-  #endif
-    
-
   // update cells that transitioned
   for( int y = 0; y < numStrands; ++y) {
     for (int x = 0; x < pixelsPerStrand; ++x) {
@@ -183,24 +164,6 @@ int countNeighbors(int x, int y) {
 
 void showCells() {
 
-  #ifdef DEBUG
-    Serial.println("showCells");
-  for( int y = 0; y < numStrands; ++y) {
-    for (int x = 0; x < pixelsPerStrand; ++x) {
-        long cellAsLong = cells[x][y];
-        Serial.print("r=");
-        Serial.print(getRedFromLong(cellAsLong));
-        Serial.print(";g=");
-        Serial.print(getGreenFromLong(cellAsLong));
-        Serial.print(";b=");
-        Serial.print(getBlueFromLong(cellAsLong));
-        Serial.print("|");
-    }
-    Serial.println("");
-  }    
-  Serial.println("==========");
-  #endif
-  
   for (int y = 0; y < numStrands; ++y) {
     for(int x = 0; x < pixelsPerStrand; ++x) {
         long cellAsLong = cells[x][y];
@@ -213,6 +176,8 @@ void showCells() {
 }
 
 void loop() {
+  // TODO: find interesting seeds, limit loops, tweak colors.
   showCells();
   mutateGrid();
 }
+
