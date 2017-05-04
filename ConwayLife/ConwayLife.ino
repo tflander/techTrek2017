@@ -19,7 +19,7 @@ int blueState;
 int wrapCells = 1;
 
 const int isRGBW = 0;
-const int delayBetweenCycles = 500;
+const int delayBetweenCycles = 400;
 typedef int (*liveOrDeadFunction)();
 
 unsigned long cells[pixelsPerStrand][numStrands];
@@ -62,35 +62,65 @@ void initAllDead() {
   init(dead);
 }
 
+void createGlider(int x, int y) {
+  setAlive(0+x, 0+y);
+  setAlive(1+x, 0+y);
+  setAlive(2+x, 0+y);
+  setAlive(2+x, 1+y);
+  setAlive(1+x, 2+y);  
+}
+
 void initGlider() {
   wrapCells = 0;
   initAllDead();
-  setAlive(0, 5);
-  setAlive(1, 5);
-  setAlive(2, 5);
-  setAlive(2, 6);
-  setAlive(1, 7);
+  createGlider(0, 5);
+  createGlider(5, 5);
+  createGlider(10, 5);
+  createGlider(15, 5);
 }
 
-// TODO: other patterns to test  http://www.conwaylife.com/wiki/Oscillator  http://www.conwaylife.com/wiki/List_of_common_oscillators
-// http://www.conwaylife.com/wiki/Caterer
-// http://www.conwaylife.com/wiki/Mazing
-// http://www.conwaylife.com/wiki/Mold
-// http://www.conwaylife.com/wiki/Tumbler
-// http://www.conwaylife.com/wiki/Octagon_2
-// http://www.conwaylife.com/wiki/Clock
-// http://www.conwaylife.com/wiki/Great_on-off
-// http://www.conwaylife.com/wiki/Spark_coil
+void initQueenBeeShuttle() {
+  wrapCells = 0;
+  initAllDead();
+  //$9bo12b
+  setAlive(9, 0);  
+  //$7bobo12b
+  setAlive(7, 1);  
+  setAlive(9, 1);  
+  //$6bobo13b
+  setAlive(6, 2);  
+  setAlive(8, 2);  
+  //$2o
+  setAlive(0, 3);  
+  setAlive(1, 3);  
+  // 3bo
+  setAlive(5, 3);  
+  //  2bo 
+  setAlive(8, 3);  
+  // 11b2o 
+  setAlive(20, 3);  
+  setAlive(21, 3);  
+  
+  //$2o
+  setAlive(0, 4);  
+  setAlive(1, 4);  
+  
+  // 4bobo
+  setAlive(6, 4);
+  setAlive(8, 4);
+  
+  // 11b2o
+  setAlive(20, 4);  
+  setAlive(21, 4);  
 
-// http://www.conwaylife.com/wiki/Tripole
-// http://www.conwaylife.com/wiki/Quadpole
-// http://www.conwaylife.com/wiki/Pentapole
-
-// http://www.conwaylife.com/wiki/Tumbler
-
-// DO THESE!
-// http://www.conwaylife.com/wiki/Queen_bee_shuttle
-// http://www.conwaylife.com/wiki/Coe%27s_p8
+  //$7bobo12b
+  setAlive(7, 5);  
+  setAlive(9, 5);  
+  
+  //$9bo!
+  setAlive(9, 6);  
+  
+}
 
 int randomDeadOrAlive() {
   return random(2);
@@ -299,9 +329,20 @@ void gliderDemo() {
   }
 }
 
+void queenBeeShuttleDemo() {
+  initQueenBeeShuttle();
+
+  setRgbStates(LIVE, NEUTRAL, DEAD);
+  for(int i = 0; i < 300; ++i) {
+      showCells();
+      mutateGrid(); 
+  }
+}
+
 void loop() {
 //  wrappingNeighborDemo();
 //  noWrappingNeighborDemo();  
-  gliderDemo();
+//  gliderDemo();
+  queenBeeShuttleDemo();
 }
 
