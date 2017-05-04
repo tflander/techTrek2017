@@ -7,7 +7,7 @@
 
 const int numStrands = 8;
 const int pixelsPerStrand = 24;
-const int onBrightness = 32;
+const int onBrightness = 8;
 const int pinForRowZero = 2;
 const int LIVE = 1;
 const int DEAD = -1;
@@ -195,25 +195,28 @@ void runCyclesWithSeed(int cycles, int seed) {
   }
 }
 
+void setRgbStates(int rState, int gState, int bState) {
+  redState = rState;
+  greenState = gState;
+  blueState = bState;
+}
+
 void loop() {
 
-//  redState = LIVE;
-//  greenState = NEUTRAL;
-//  blueState = DEAD;
-//
-//  runCyclesWithSeed(175, 2);
+  setRgbStates(LIVE, NEUTRAL, DEAD);
+  runCyclesWithSeed(225, 2); 
+  setRgbStates(LIVE, DEAD, NEUTRAL);
+  runCyclesWithSeed(80, 5);  
 
-  redState = NEUTRAL;
-  greenState = DEAD;
-  blueState = LIVE;
-
-  runCyclesWithSeed(100, 3);
+  setRgbStates(NEUTRAL, DEAD, LIVE);
+  runCyclesWithSeed(180, 3); 
+  setRgbStates(NEUTRAL, LIVE, DEAD);
+  runCyclesWithSeed(70, 6);  
   
-  redState = DEAD;
-  greenState = LIVE;
-  blueState = NEUTRAL;
-
-  runCyclesWithSeed(240, 4);
+  setRgbStates(DEAD, LIVE, NEUTRAL);
+  runCyclesWithSeed(90, 4);  
+  setRgbStates(DEAD, NEUTRAL, LIVE);
+  runCyclesWithSeed(70, 7);  
   
 }
 
