@@ -15,7 +15,8 @@ Please fork this repository and send me pull requests for displays that you want
 **randomMatrix**: This program simulates Hollywood computers from the 1960's.
   https://www.youtube.com/watch?v=mIcSkuEbRSg
 
-In Progress: **Conway's Game of Life**
+**Conway's Game of Life**: classic computer science problem
+https://www.youtube.com/watch?v=ASGULYbXmfs
 
 TODO: **Message Marquee**
 
