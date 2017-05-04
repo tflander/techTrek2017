@@ -16,9 +16,11 @@ const int NEUTRAL = 0;
 int redState;
 int greenState;
 int blueState;
+int wrapCells = 1;
 
 const int isRGBW = 0;
 const int delayBetweenCycles = 500;
+typedef int (*liveOrDeadFunction)();
 
 unsigned long cells[pixelsPerStrand][numStrands];
 
@@ -43,16 +45,60 @@ void setup() {
 
 }
 
-void initWithSeed(int seed)  {
-  randomSeed(seed);
+void init(liveOrDeadFunction lifeFunc)  {
 
   for (int y=0; y < numStrands; ++y) {
 
     for(int x = 0; x < pixelsPerStrand; ++x) {
-      setCell(random(2), x, y);
+      setCell(lifeFunc(), x, y);
     }
   }
   
+}
+
+int dead() { return 0;}
+
+void initAllDead() {
+  init(dead);
+}
+
+void initGlider() {
+  wrapCells = 0;
+  initAllDead();
+  setAlive(0, 5);
+  setAlive(1, 5);
+  setAlive(2, 5);
+  setAlive(2, 6);
+  setAlive(1, 7);
+}
+
+// TODO: other patterns to test  http://www.conwaylife.com/wiki/Oscillator  http://www.conwaylife.com/wiki/List_of_common_oscillators
+// http://www.conwaylife.com/wiki/Caterer
+// http://www.conwaylife.com/wiki/Mazing
+// http://www.conwaylife.com/wiki/Mold
+// http://www.conwaylife.com/wiki/Tumbler
+// http://www.conwaylife.com/wiki/Octagon_2
+// http://www.conwaylife.com/wiki/Clock
+// http://www.conwaylife.com/wiki/Great_on-off
+// http://www.conwaylife.com/wiki/Spark_coil
+
+// http://www.conwaylife.com/wiki/Tripole
+// http://www.conwaylife.com/wiki/Quadpole
+// http://www.conwaylife.com/wiki/Pentapole
+
+// http://www.conwaylife.com/wiki/Tumbler
+
+// DO THESE!
+// http://www.conwaylife.com/wiki/Queen_bee_shuttle
+// http://www.conwaylife.com/wiki/Coe%27s_p8
+
+int randomDeadOrAlive() {
+  return random(2);
+}
+
+void initWithSeed(int seed)  {
+  randomSeed(seed);
+  init(randomDeadOrAlive);
 }
 
 int getRandomValueForColor(int isLive, int color) {
@@ -158,14 +204,18 @@ int countNeighbors(int x, int y) {
        if(x1 != x || y1 != y) {
          int xpos = x1;
          int ypos = y1;
-         if(ypos < 0) ypos = numStrands - 1;
-         if(xpos >= pixelsPerStrand) xpos = 0;
-         if(xpos < 0) xpos =  pixelsPerStrand - 1;
-         if(ypos >= numStrands) ypos = 0;
-         if(isAlive(cells[xpos][ypos])) {
+
+         if(wrapCells) {
+           if(ypos < 0) ypos = numStrands - 1;
+           if(xpos >= pixelsPerStrand) xpos = 0;
+           if(xpos < 0) xpos =  pixelsPerStrand - 1;
+           if(ypos >= numStrands) ypos = 0;
+         }
+         
+         if(ypos > -1 && xpos > -1 && ypos < numStrands && xpos < pixelsPerStrand && isAlive(cells[xpos][ypos])) {
              neighbors = neighbors + 1;
          }
-       }
+       }  
       }
     }
     return neighbors;
@@ -201,8 +251,9 @@ void setRgbStates(int rState, int gState, int bState) {
   blueState = bState;
 }
 
-void loop() {
-
+void wrappingNeighborDemo() {
+  wrapCells = 1;
+  
   setRgbStates(LIVE, NEUTRAL, DEAD);
   runCyclesWithSeed(225, 2); 
   setRgbStates(LIVE, DEAD, NEUTRAL);
@@ -216,7 +267,41 @@ void loop() {
   setRgbStates(DEAD, LIVE, NEUTRAL);
   runCyclesWithSeed(90, 4);  
   setRgbStates(DEAD, NEUTRAL, LIVE);
-  runCyclesWithSeed(70, 7);  
+  runCyclesWithSeed(70, 7);    
+}
+
+void noWrappingNeighborDemo() {
+  wrapCells = 0;
+
+  // TODO: adjust seeds and cycles
+  setRgbStates(LIVE, NEUTRAL, DEAD);
+  runCyclesWithSeed(225, 2); 
+  setRgbStates(LIVE, DEAD, NEUTRAL);
+  runCyclesWithSeed(80, 5);  
+
+  setRgbStates(NEUTRAL, DEAD, LIVE);
+  runCyclesWithSeed(180, 3); 
+  setRgbStates(NEUTRAL, LIVE, DEAD);
+  runCyclesWithSeed(70, 6);  
   
+  setRgbStates(DEAD, LIVE, NEUTRAL);
+  runCyclesWithSeed(90, 4);  
+  setRgbStates(DEAD, NEUTRAL, LIVE);
+  runCyclesWithSeed(70, 7);    
+}
+
+void gliderDemo() {
+  initGlider();
+  setRgbStates(LIVE, NEUTRAL, DEAD);
+  for(int i = 0; i < 30; ++i) {
+      showCells();
+      mutateGrid(); 
+  }
+}
+
+void loop() {
+//  wrappingNeighborDemo();
+//  noWrappingNeighborDemo();  
+  gliderDemo();
 }
 
