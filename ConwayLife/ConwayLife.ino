@@ -7,7 +7,7 @@
 
 const int numStrands = 8;
 const int pixelsPerStrand = 24;
-const int onBrightness = 8;
+const int onBrightness = 32;
 const int pinForRowZero = 2;
 const int LIVE = 1;
 const int DEAD = -1;
@@ -80,8 +80,10 @@ void initGlider() {
 }
 
 void initQueenBeeShuttle() {
+  setRgbStates(NEUTRAL, LIVE, DEAD);
   wrapCells = 0;
   initAllDead();
+  showCells();
   //$9bo12b
   setAlive(9, 0);  
   //$7bobo12b
@@ -330,9 +332,9 @@ void gliderDemo() {
 }
 
 void queenBeeShuttleDemo() {
+  setRgbStates(NEUTRAL, LIVE, DEAD);
   initQueenBeeShuttle();
 
-  setRgbStates(LIVE, NEUTRAL, DEAD);
   for(int i = 0; i < 300; ++i) {
       showCells();
       mutateGrid(); 
