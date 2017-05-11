@@ -32,3 +32,5 @@ after soldering a bunch of LEDS.
 
 **stressTest**: Verify that the power is adequate for lighting all pixels full blast at the same time
 
+**hackMe**: A simple hackable example
+
