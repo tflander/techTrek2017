@@ -62,36 +62,14 @@ void showCells() {
   delay(cycleDelay);  
 }
 
-
-//void randomizeStrand(int row, colorFunction redFunction, colorFunction greenFunction, colorFunction blueFunction, colorFunction whiteFunction) {
-//      Adafruit_NeoPixel* pixels = matrix[row];
-//      for(int pixel=0; pixel < pixelsPerStrand; ++ pixel) {
-//          if(isRGBW) {
-//            // TODO:
-//          } else {
-//            pixels->setPixelColor(pixel, redFunction(), greenFunction(), blueFunction());            
-//          }
-//      }
-//      pixels->show();
-//}
-
-//void randomizeMatrix(colorFunction redFunction, colorFunction greenFunction, colorFunction blueFunction, colorFunction whiteFunction) {
-//  for (int c = 0; c < cyclesPerColor; ++c) {
-//    for(int i = 0; i < numStrands; ++i) {
-//      randomizeStrand(i, redFunction, greenFunction, blueFunction, whiteFunction);
-//    }
-//    delay(cycleDelay);
-//  }
-//}
-
-void setHline(color, int x1, int x2, int y) {
-  for(x = x1; x <= x2; ++x) {
+void setHline(unsigned long color, int x1, int x2, int y) {
+  for(int x = x1; x <= x2; ++x) {
     cells[x][y] = color;
   }
 }
 
-void setVline(color, int y1, int y2, int x) {
-  for(y = y1; y <= y2; ++y) {
+void setVline(unsigned long color, int y1, int y2, int x) {
+  for(int y = y1; y <= y2; ++y) {
     cells[x][y] = color;
   }  
 }
@@ -103,11 +81,22 @@ void paintRing(unsigned long color, int x1, int y1, int x2, int y2) {
   setVline(color, y1, y2, x2);
 }
 
-void loop() {
+void paintRings(unsigned long innerRingColor, unsigned long ring2Color, unsigned long ring3Color, unsigned long outerRingColor) {
+
   int centerX1 = 3;
   int centerX2 = 20;
   int centerY1 = 3;
   int centerY2 = 4;
+
+  paintRing(innerRingColor, centerX1, centerY1, centerX2, centerY2);
+  paintRing(ring2Color, centerX1-1, centerY1-1, centerX2+1, centerY2+1);
+  paintRing(ring3Color, centerX1-2, centerY1-2, centerX2+2, centerY2+2);
+  paintRing(outerRingColor, centerX1-3, centerY1-3, centerX2+3, centerY2+3);  
+  showCells();
+  delay(cycleDelay);
+}
+
+void loop() {
 
   unsigned long red =     toLong(0, onBrightness, 0, 0);
   unsigned long green =   toLong(0, 0, onBrightness, 0);
@@ -116,10 +105,11 @@ void loop() {
   unsigned long magenta = toLong(0, onBrightness, 0, onBrightness);
   unsigned long yellow =  toLong(0, onBrightness, onBrightness , 0);
 
-  paintRing(red, centerX1, centerY1, centerX2, centerY2);
-  paintRing(green, centerX1-1, centerY1-1, centerX2+1, centerY2+1);
-  paintRing(blue, centerX1-2, centerY1-2, centerX2+2, centerY2+2);
-  paintRing(yellow, centerX1-3, centerY1-3, centerX2+3, centerY2+3);
+  paintRings(red, green, blue, yellow);
+  paintRings(green, blue, yellow, red);
+  paintRings(blue, yellow, red, green);
+  paintRings(yellow, red, green, blue);
+
   
 }
 

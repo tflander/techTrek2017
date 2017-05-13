@@ -19,7 +19,7 @@ int blueState;
 int wrapCells = 1;
 
 const int isRGBW = 0;
-const int delayBetweenCycles = 400;
+const int delayBetweenCycles = 200;
 typedef int (*liveOrDeadFunction)();
 
 unsigned long cells[pixelsPerStrand][numStrands];
@@ -342,9 +342,9 @@ void queenBeeShuttleDemo() {
 }
 
 void loop() {
-//  wrappingNeighborDemo();
-//  noWrappingNeighborDemo();  
-//  gliderDemo();
+  wrappingNeighborDemo();
+  noWrappingNeighborDemo();  
+  gliderDemo();
   queenBeeShuttleDemo();
 }
 
