@@ -5,7 +5,7 @@
 
 const int numStrands = 8;
 const int pixelsPerStrand = 24;
-const int onBrightness = 32;
+const int onBrightness = 16;
 const int pinForRowZero = 2;
 const int isRGBW = 0;
 const int cycleDelay = 400;
@@ -27,11 +27,11 @@ const int TO_MAGENTA = TO_RED | TO_BLUE;
 const int TO_YELLOW = TO_RED | TO_GREEN;
 
 unsigned long red =     toLong(0, onBrightness, 0, 0);
-unsigned long green =   toLong(TO_BLUE, 0, onBrightness, 0);
-unsigned long blue =    toLong(TO_YELLOW, 0, 0, onBrightness);
+unsigned long green =   toLong(TO_MAGENTA, 0, onBrightness, 0);
+unsigned long blue =    toLong(TO_GREEN, 0, 0, onBrightness);
 unsigned long cyan =    toLong(0, 0, onBrightness, onBrightness);
-unsigned long magenta = toLong(TO_GREEN, onBrightness, 0, onBrightness);
-unsigned long yellow =  toLong(TO_MAGENTA, onBrightness, onBrightness , 0);
+unsigned long magenta = toLong(TO_YELLOW, onBrightness, 0, onBrightness);
+unsigned long yellow =  toLong(TO_BLUE, onBrightness, onBrightness , 0);
 
 unsigned long colors[] = {magenta, green, blue, yellow};
 
@@ -115,7 +115,6 @@ void showCells() {
     matrix[y]->show();
   }
   
-//  delay(cycleDelay);  // TODO: probably remove this?
   fadeToNextColor();
 }
 
@@ -151,25 +150,15 @@ void paintRings(int offset) {
   int centerY2 = 4;
 
   paintRing(getColorWithOffset(offset), centerX1, centerY1, centerX2, centerY2);
-//  paintRing(getColorWithOffset(offset), centerX1-1, centerY1-1, centerX2+1, centerY2+1);
-//  paintRing(getColorWithOffset(offset), centerX1-2, centerY1-2, centerX2+2, centerY2+2);
-//  paintRing(getColorWithOffset(offset), centerX1-3, centerY1-3, centerX2+3, centerY2+3);  
   paintRing(getColorWithOffset(offset+1), centerX1-1, centerY1-1, centerX2+1, centerY2+1);
   paintRing(getColorWithOffset(offset+2), centerX1-2, centerY1-2, centerX2+2, centerY2+2);
   paintRing(getColorWithOffset(offset+3), centerX1-3, centerY1-3, centerX2+3, centerY2+3);  
   showCells();
-//  delay(cycleDelay);
 }
 
 void loop() {
 
-//    paintRings(2);
-
-//  for (int i=3; i>=0; --i) {
-//    paintRings(i);
-//  }
-
-  for (int i=0; i<4; ++i) {
+  for (int i=3; i>=0; --i) {
     paintRings(i);
   }
   
