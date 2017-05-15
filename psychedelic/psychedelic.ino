@@ -5,11 +5,11 @@
 
 const int numStrands = 8;
 const int pixelsPerStrand = 24;
-const int onBrightness = 16;
+const int onBrightness = 32;
 const int pinForRowZero = 2;
 const int isRGBW = 0;
 const int cycleDelay = 400;
-const int fadeDelay = 40;
+const int fadeDelay = 10;
 
 Adafruit_NeoPixel *matrix[numStrands];
 
@@ -22,9 +22,9 @@ unsigned long toLong(int data, int red, int green, int blue) {
 const int TO_RED = 1;
 const int TO_GREEN = 2;
 const int TO_BLUE = 4;
-const int TO_CYAN = TO_GREEN & TO_BLUE;
-const int TO_MAGENTA = TO_RED & TO_BLUE;
-const int TO_YELLOW = TO_GREEN & TO_GREEN;
+const int TO_CYAN = TO_GREEN | TO_BLUE;
+const int TO_MAGENTA = TO_RED | TO_BLUE;
+const int TO_YELLOW = TO_RED | TO_GREEN;
 
 unsigned long red =     toLong(0, onBrightness, 0, 0);
 unsigned long green =   toLong(TO_BLUE, 0, onBrightness, 0);
@@ -115,7 +115,7 @@ void showCells() {
     matrix[y]->show();
   }
   
-  delay(cycleDelay);  // TODO: probably remove this?
+//  delay(cycleDelay);  // TODO: probably remove this?
   fadeToNextColor();
 }
 
@@ -151,19 +151,27 @@ void paintRings(int offset) {
   int centerY2 = 4;
 
   paintRing(getColorWithOffset(offset), centerX1, centerY1, centerX2, centerY2);
+//  paintRing(getColorWithOffset(offset), centerX1-1, centerY1-1, centerX2+1, centerY2+1);
+//  paintRing(getColorWithOffset(offset), centerX1-2, centerY1-2, centerX2+2, centerY2+2);
+//  paintRing(getColorWithOffset(offset), centerX1-3, centerY1-3, centerX2+3, centerY2+3);  
   paintRing(getColorWithOffset(offset+1), centerX1-1, centerY1-1, centerX2+1, centerY2+1);
   paintRing(getColorWithOffset(offset+2), centerX1-2, centerY1-2, centerX2+2, centerY2+2);
   paintRing(getColorWithOffset(offset+3), centerX1-3, centerY1-3, centerX2+3, centerY2+3);  
   showCells();
-  delay(cycleDelay);
+//  delay(cycleDelay);
 }
 
 void loop() {
 
-  for (int i=3; i>=0; --i) {
+//    paintRings(2);
+
+//  for (int i=3; i>=0; --i) {
+//    paintRings(i);
+//  }
+
+  for (int i=0; i<4; ++i) {
     paintRings(i);
   }
-
   
 }
 
