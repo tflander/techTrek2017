@@ -3,6 +3,8 @@
   #include <avr/power.h>
 #endif
 
+#include <ToddScreenArray.h>
+
 const int numStrands = 8;
 const int pixelsPerStrand = 24;
 const int onBrightness = 16;
@@ -12,6 +14,8 @@ const int isRGBW = 0;
 const int fadeDelay = 40;
 
 Adafruit_NeoPixel *matrix[numStrands];
+
+ScreenArray *screenArray;
 
 unsigned long cells[pixelsPerStrand][numStrands];
 
@@ -38,11 +42,14 @@ unsigned long colors[] = {magenta, green, blue, yellow, cyan, red};
 int numColors = 6;
 
 void setup() {
-
+  
   neoPixelType pixelType = NEO_GRB + NEO_KHZ800;
   if(isRGBW) {
     pixelType = NEO_GRBW + NEO_KHZ800;
   }
+
+  screenArray = new ScreenArray(pixelType, pixelsPerStrand, numStrands);
+  
   for (int strand=0; strand < numStrands; ++strand) {
     Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, NEO_GRB + NEO_KHZ800);
     pixels->begin();
@@ -52,19 +59,19 @@ void setup() {
 }
 
 int getRedFromLong(unsigned long value) {
-  return (value >> 16) & 255;
+  return screenArray->getRedFromLong(value);
 }
 
 int getGreenFromLong(unsigned long value) {
-  return (value >> 8) & 255;
+  return screenArray->getGreenFromLong(value);
 }
 
 int getBlueFromLong(unsigned long value) {
-  return value & 255;
+  return screenArray->getBlueFromLong(value);
 }
 
 int getDataFromLong(unsigned long value) {
-  return (value >> 24) & 255;
+  return screenArray->getDataFromLong(value);
 }
 
 void fadeToNextColor() {
