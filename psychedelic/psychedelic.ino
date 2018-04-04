@@ -7,7 +7,7 @@
 
 const int numStrands = 8;
 const int pixelsPerStrand = 24;
-const int onBrightness = 16;
+const int onBrightness = 6;
 const int pinForRowZero = 2;
 const int isRGBW = 0;
 //const int cycleDelay = 400;
@@ -51,7 +51,7 @@ void setup() {
   screenArray = new ScreenArray(pixelType, pixelsPerStrand, numStrands);
   
   for (int strand=0; strand < numStrands; ++strand) {
-    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, NEO_GRB + NEO_KHZ800);
+    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, pixelType);
     pixels->begin();
     matrix[strand] = pixels;
   }

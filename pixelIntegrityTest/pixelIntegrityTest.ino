@@ -5,9 +5,9 @@
 
 const int numStrands = 8;
 const int pixelsPerStrand = 24;
-const int onBrightness = 8;
+const int onBrightness = 255;
 const int pinForRowZero = 2;
-const int isRGBW = 0;
+const int isRGBW = 1;
 const int PAUSE_BETWEEN_COLORS = 1000;
 
 Adafruit_NeoPixel *matrix[numStrands];
@@ -19,7 +19,7 @@ void setup() {
     pixelType = NEO_GRBW + NEO_KHZ800;
   }
   for (int strand=0; strand < numStrands; ++strand) {
-    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, NEO_GRB + NEO_KHZ800);
+    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, NEO_GRBW + NEO_KHZ800);
     pixels->begin();
     matrix[strand] = pixels;
   }
@@ -30,7 +30,7 @@ void setStrandRGBW(int row, int red, int green, int blue, int white) {
       Adafruit_NeoPixel* pixels = matrix[row];
       for(int pixel=0; pixel < pixelsPerStrand; ++ pixel) {
           if(isRGBW) {
-            // TODO:
+            pixels->setPixelColor(pixel, pixels->Color(red,green,blue,white) );
           } else {
             pixels->setPixelColor( pixel, red, green, blue);
           }
@@ -45,13 +45,13 @@ void setPixelsRGBW(int red, int green, int blue, int white) {
 }
 
 void loop() {
-  setPixelsRGBW(onBrightness, 0, 0, 0);
+  setPixelsRGBW(onBrightness, 0, 0, onBrightness);
   delay(PAUSE_BETWEEN_COLORS);
-  setPixelsRGBW(0, onBrightness, 0, 0);
+  setPixelsRGBW(0, onBrightness, 0, onBrightness);
   delay(PAUSE_BETWEEN_COLORS);
-  setPixelsRGBW(0, 0, onBrightness, 0);
+  setPixelsRGBW(0, 0, onBrightness, onBrightness);
   delay(PAUSE_BETWEEN_COLORS);
-  setPixelsRGBW(0, 0, 0, onBrightness);
+  setPixelsRGBW(onBrightness, onBrightness, onBrightness, onBrightness);
   delay(PAUSE_BETWEEN_COLORS);
 }
 

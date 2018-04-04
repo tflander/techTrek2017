@@ -5,11 +5,11 @@
 
 #include <ToddScreenArray.h>
 
-const int numStrands = 8;
+const int numStrands = 32;
 const int pixelsPerStrand = 24;
-const int onBrightness = 16;
+const int onBrightness = 255;
 const int pinForRowZero = 2;
-const int isRGBW = 0;
+const int isRGBW = -1;
 //const int cycleDelay = 400;
 const int fadeDelay = 40;
 
@@ -51,7 +51,7 @@ void setup() {
   screenArray = new ScreenArray(pixelType, pixelsPerStrand, numStrands);
   
   for (int strand=0; strand < numStrands; ++strand) {
-    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, NEO_GRB + NEO_KHZ800);
+    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, pixelType);
     pixels->begin();
     matrix[strand] = pixels;
   }
@@ -108,7 +108,13 @@ void stepFade() {
         blue = adjustColor(blue, data & TO_BLUE);
 
         cells[x][y] = toLong(data, red, green, blue);
-        matrix[y]->setPixelColor(x, red, green, blue);
+//        matrix[y]->setPixelColor(x, red, green, blue);
+          if(isRGBW) {
+            matrix[y]->setPixelColor(x, matrix[y]->Color(red, green, blue, 128) );
+          } else {
+            matrix[y]->setPixelColor(x, red, green, blue);            
+          }
+        
     }
     matrix[y]->show();
   }
@@ -121,12 +127,18 @@ void showCells() {
   for (int y = 0; y < numStrands; ++y) {
     for(int x = 0; x < pixelsPerStrand; ++x) {
         long cellAsLong = cells[x][y];
-        matrix[y]->setPixelColor(x, getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong));
+        //matrix[y]->setPixelColor(x, getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong));
+        if(isRGBW) {
+            matrix[y]->setPixelColor(x, matrix[y]->Color( getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong), 128) );
+          } else {
+            matrix[y]->setPixelColor(x,  getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong));            
+          }
     }
     matrix[y]->show();
   }
   
   fadeToNextColor();
+  //delay(300);
 }
 
 void setHline(unsigned long color, int x1, int x2, int y) {

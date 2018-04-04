@@ -5,7 +5,7 @@
 
 const int numStrands = 8;
 const int pixelsPerStrand = 24;
-const int onBrightness = 16;
+const int onBrightness = 255;
 const int pinForRowZero = 2;
 const int isRGBW = 0;
 const int cyclesPerColor = 20;
@@ -22,7 +22,7 @@ void setup() {
     pixelType = NEO_GRBW + NEO_KHZ800;
   }
   for (int strand=0; strand < numStrands; ++strand) {
-    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, NEO_GRB + NEO_KHZ800);
+    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, pixelType);
     pixels->begin();
     matrix[strand] = pixels;
   }
@@ -42,6 +42,11 @@ int randomFullRange() {
   return random(onBrightness);
 }
 
+int randomHalfRange() {
+  return random(onBrightness/2);
+}
+
+
 int off() {
   return 0;
 }
@@ -50,7 +55,7 @@ void randomizeStrand(int row, colorFunction redFunction, colorFunction greenFunc
       Adafruit_NeoPixel* pixels = matrix[row];
       for(int pixel=0; pixel < pixelsPerStrand; ++ pixel) {
           if(isRGBW) {
-            // TODO:
+            pixels->setPixelColor(pixel, pixels->Color(redFunction(), greenFunction(), blueFunction(), whiteFunction()) );
           } else {
             pixels->setPixelColor(pixel, redFunction(), greenFunction(), blueFunction());            
           }
@@ -68,11 +73,11 @@ void randomizeMatrix(colorFunction redFunction, colorFunction greenFunction, col
 }
 
 void loop() {
-  randomizeMatrix(off, randomFullRange, halfIntensity, off);
-  randomizeMatrix(randomFullRange, halfIntensity, off, off);
-  randomizeMatrix(halfIntensity, off, randomFullRange, off);
-  randomizeMatrix(randomFullRange, off, halfIntensity, off);
-  randomizeMatrix(off, halfIntensity, randomFullRange, off);
-  randomizeMatrix(halfIntensity, randomFullRange, off, off);
+  randomizeMatrix(off, randomFullRange, halfIntensity, randomHalfRange);
+  randomizeMatrix(randomFullRange, halfIntensity, off, randomHalfRange);
+  randomizeMatrix(halfIntensity, off, randomFullRange, randomHalfRange);
+  randomizeMatrix(randomFullRange, off, halfIntensity, randomHalfRange);
+  randomizeMatrix(off, halfIntensity, randomFullRange, randomHalfRange);
+  randomizeMatrix(halfIntensity, randomFullRange, off, randomHalfRange);
 }
 

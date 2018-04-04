@@ -7,7 +7,7 @@
 
 const int numStrands = 8;
 const int pixelsPerStrand = 24;
-const int onBrightness = 32;
+const int onBrightness = 255;
 const int pinForRowZero = 2;
 const int LIVE = 1;
 const int DEAD = -1;
@@ -18,7 +18,7 @@ int greenState;
 int blueState;
 int wrapCells = 1;
 
-const int isRGBW = 0;
+const int isRGBW = -1;
 const int delayBetweenCycles = 200;
 typedef int (*liveOrDeadFunction)();
 
@@ -38,7 +38,7 @@ void setup() {
   }
 
   for (int y=0; y < numStrands; ++y) {
-    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, y + pinForRowZero, NEO_GRB + NEO_KHZ800);
+    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, y + pinForRowZero, pixelType);
     pixels->begin();
     matrix[y] = pixels;
   }  
@@ -259,7 +259,13 @@ void showCells() {
   for (int y = 0; y < numStrands; ++y) {
     for(int x = 0; x < pixelsPerStrand; ++x) {
         long cellAsLong = cells[x][y];
-        matrix[y]->setPixelColor(x, getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong));
+        if(isRGBW) {
+            int white = 255;
+            matrix[y]->setPixelColor(x, matrix[y]->Color(getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong),white) );
+        } else {
+            matrix[y]->setPixelColor(x, getRedFromLong(cellAsLong), getGreenFromLong(cellAsLong), getBlueFromLong(cellAsLong));
+        }
+
     }
     matrix[y]->show();
   }
@@ -342,9 +348,9 @@ void queenBeeShuttleDemo() {
 }
 
 void loop() {
-  wrappingNeighborDemo();
-  noWrappingNeighborDemo();  
-  gliderDemo();
+//  wrappingNeighborDemo();
+//  noWrappingNeighborDemo();  
+//  gliderDemo();
   queenBeeShuttleDemo();
 }
 

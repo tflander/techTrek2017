@@ -4,6 +4,25 @@
 
 #include <Adafruit_NeoPixel.h>
 
+class Strand {
+    public:
+
+        Strand(const int& strandCount);
+        ~Strand();
+
+        unsigned long getRaw(const int& index);
+
+        int getRedFromLong(unsigned long);
+        int getGreenFromLong(unsigned long);
+        int getBlueFromLong(unsigned long);
+        int getDataFromLong(unsigned long);
+
+    private:
+
+        int strandCount;
+        unsigned long* pixelData = NULL;
+};
+
 class ScreenArray {
     public:
         ScreenArray(const neoPixelType&, const int& pixelsPerStrand, const int& numStrands);
@@ -26,7 +45,9 @@ class ScreenArray {
         }
         // end temp for now
       
+    private:
 
+        Strand* strands;
 };
 
 #endif TODD_SCREEN_ARRAY_H

@@ -13,7 +13,7 @@ Adafruit_NeoPixel *matrix[numStrands];
 void setup() {
 
   for (int strand=0; strand < numStrands; ++strand) {
-    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, NEO_GRB + NEO_KHZ800);
+    Adafruit_NeoPixel* pixels = new Adafruit_NeoPixel(pixelsPerStrand, strand + pinForRowZero, NEO_GRBW + NEO_KHZ800);
     pixels->begin();
     matrix[strand] = pixels;
   }
